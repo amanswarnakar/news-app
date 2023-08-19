@@ -1,22 +1,23 @@
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function Login() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: any) => {
     e.preventDefault();
     try {
       await signIn("credentials", {
         email,
         password,
-        redirect: true,
         callbackUrl: "/",
+        redirect: true,
       });
-      console.log("User registered successfully");
     } catch (error) {
-      console.error("Error registering user:", error);
+      console.error("Error: ", error);
     }
   };
 

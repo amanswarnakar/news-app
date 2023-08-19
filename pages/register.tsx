@@ -1,15 +1,30 @@
 import { useState } from "react";
-import { auth } from "../firebase";
+import axios from "axios";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/firebase";
 
 export default function Register() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleRegister = async (e: any) => {
     e.preventDefault();
     try {
-      await auth.createUserWithEmailAndPassword(email, password);
-      console.log("User registered successfully");
+      const user = await createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          if (user) return user;
+          return null;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      console.log(user);
+      signIn("credentials", { email, password });
+      router.push("/");
     } catch (error) {
       console.error("Error registering user:", error);
     }
@@ -72,7 +87,6 @@ export default function Register() {
 
             <div>
               <button
-                type="submit"
                 disabled={!email || email == "" || !password || password == ""}
                 onClick={handleRegister}
                 className="disabled:cursor-not-allowed flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"

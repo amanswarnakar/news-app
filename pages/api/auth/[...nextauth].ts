@@ -21,7 +21,12 @@ export const authOptions = {
             if (userCredential.user) return userCredential.user;
             return null;
           })
-          .catch((error) => console.log(error));
+          .catch((error) => console.log(error))
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(error);
+          });
       },
     }),
   ],
