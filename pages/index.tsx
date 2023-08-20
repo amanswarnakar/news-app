@@ -1,7 +1,8 @@
-import { useSession } from "next-auth/react";
+import NewsContainer from "@/components/NewsContainer";
 
 export default function Home() {
-  return <div>Hello</div>;
+  return <div className="p-8">
+    <NewsContainer />
+  </div>;
 }
 
-// Home.requireAuth = true;
